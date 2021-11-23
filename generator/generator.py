@@ -3,10 +3,10 @@ import hashlib
 
 
 def ddd():
-    f = open("generator/DDDs.txt", "r")
-    ddd_list = f.read().split(" ")
+    file = open("generator/data/DDDs.txt", "r")
+    ddd_list = file.read().split(" ")
     ddd = "(" + str(choice(ddd_list)).rstrip('\n') + ")"
-    f.close()
+    file.close()
     return ddd
 
 
@@ -25,7 +25,7 @@ def br_phone_number(**kwargs):
 
 
 def fantasy_name():
-    file = open("generator/syllables.txt", "r")
+    file = open("generator/data/syllables.txt", "r")
     syllables = file.read()
     syllables = syllables.split()
 
@@ -44,9 +44,9 @@ def fantasy_name():
 
 
 def br_surname():
-    f = open("generator/br_surnames.txt", 'r')
-    surname_list = f.readlines()
-    f.close()
+    file = open("generator/data/br_surnames.txt", 'r')
+    surname_list = file.readlines()
+    file.close()
     number_of_names = ''
     surname = ""
     if randint(1, 10) > 8:  # 20% chance of having 1 or 4 surnames
@@ -62,9 +62,9 @@ def br_surname():
 
 
 def br_male_name():
-    f = open("generator/brazilian_male_names.txt", 'r')
-    name_list = f.readlines()
-    f.close()
+    file = open("generator/data/brazilian_male_names.txt", 'r')
+    name_list = file.readlines()
+    file.close()
     name = choice(name_list).rstrip('\n')
 
     return name
@@ -75,9 +75,9 @@ def br_complete_male_name():
 
 
 def br_female_name():
-    f = open("generator/brazilian_female_names.txt", 'r')
-    name_list = f.readlines()
-    f.close()
+    file = open("generator/data/brazilian_female_names.txt", 'r')
+    name_list = file.readlines()
+    file.close()
     name = choice(name_list).rstrip('\n')
 
     return name
@@ -85,6 +85,50 @@ def br_female_name():
 
 def br_complete_female_name():
     return br_female_name() + " " + br_surname()
+
+
+def en_surname():
+    file = open("generator/data/en_surnames.txt", 'r')
+    surname_list = file.readlines()
+    file.close()
+    number_of_names = ''
+    surname = ""
+    if randint(1, 10) > 8:  # 20% chance of having 1 or 4 surnames
+        number_of_names = choice([1, 4])
+    else:
+        number_of_names = randint(2, 3)  # 2 to 3 surnames
+
+    for i in range(number_of_names):
+        surname += choice(surname_list).rstrip('\n')
+        # adds a whitespace on all but the last iteration
+        surname += " " if i != number_of_names-1 else ""
+    return surname
+
+
+def en_male_name():
+    f = open("generator/data/en_male_names.txt", 'r')
+    name_list = f.readlines()
+    f.close()
+    name = choice(name_list).rstrip('\n')
+
+    return name
+
+
+def en_complete_male_name():
+    return en_male_name() + " " + en_surname()
+
+
+def en_female_name():
+    file = open("generator/data/en_female_names.txt", 'r')
+    name_list = file.readlines()
+    file.close()
+    name = choice(name_list).rstrip('\n')
+
+    return name
+
+
+def en_complete_female_name():
+    return en_female_name() + " " + en_surname()
 
 
 def br_cpf():  # not necessarily a valid CPF
@@ -96,7 +140,7 @@ def br_cpf():  # not necessarily a valid CPF
     return f"{part1:03d}.{part2:03d}.{part3:03d}-{part4:02d}"
 
 
-def date(**kwargs):  # not necessarily a valid date. True for years in the 2 characters format
+def date(**kwargs):  # not necessarily a valid date
     day = randint(1, 31)
     month = randint(1, 12)
     year = randint(1900, 2020)

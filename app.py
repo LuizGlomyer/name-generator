@@ -57,6 +57,31 @@ def br_surname():
     return generate(generator.br_surname, request.args.get('quantity'))
 
 
+@app.route('/en-surname/')
+def en_surname():
+    return generate(generator.en_surname, request.args.get('quantity'))
+
+
+@app.route('/en-male/')
+def en_male():
+    return generate(generator.en_male_name, request.args.get('quantity'))
+
+
+@app.route('/en-male-complete/')
+def en_complete_male_name():
+    return generate(generator.en_complete_male_name, request.args.get('quantity'))
+
+
+@app.route('/en-female/')
+def en_female():
+    return generate(generator.en_female_name, request.args.get('quantity'))
+
+
+@app.route('/en-female-complete/')
+def en_complete_female_name():
+    return generate(generator.en_complete_female_name, request.args.get('quantity'))
+
+
 @app.route('/br-cpf/')
 def br_cpf():
     return generate(generator.br_cpf, request.args.get('quantity'))
