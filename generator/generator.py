@@ -25,21 +25,44 @@ def br_phone_number(**kwargs):
 
 
 def fantasy_name():
-    file = open("generator/data/syllables.txt", "r")
-    syllables = file.read()
-    syllables = syllables.split()
+    def choose_syllable():
+        import random
+        
+        file = open("generator/data/syllables.txt", "r")
+        syllables = file.read()
+        syllables = syllables.split()
+
+        file = open("generator/data/loose_syllables.txt", "r")
+        loose_syllables = file.read()
+        loose_syllables = loose_syllables.split()
+
+        file = open("generator/data/uncommon_syllables.txt", "r")
+        uncommon_syllables = file.read()
+        uncommon_syllables = uncommon_syllables.split()
+
+        file.close()
+
+        value = random.random() * 100
+        if value >= 80:
+            return choice(uncommon_syllables)
+
+        value = random.random() * 100
+        if value >= 70:
+            return choice(loose_syllables)
+
+        return choice(syllables)
 
     name = ""
     size = randint(2, 5)  # total number of syllables
     for syllable in range(size):
-        sil = choice(syllables)
+        sil = choose_syllable()
         # first syllable can't start with those
-        while syllable == 0 and sil in "lrsxmn" or syllable == 0 and sil in ["rra", "rre", "rri", "rro", "rru", "ssa", "sse", "ssi", "sso", "ssu"]:
-            sil = choice(syllables)
+        while syllable == 0 and sil in "lrsxmntydkz":
+            sil = choose_syllable()
         name = name + sil
         name = name.capitalize()
 
-    file.close()
+    
     return name
 
 
