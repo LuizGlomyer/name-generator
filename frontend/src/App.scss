@@ -1,0 +1,38 @@
+imp
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: antiquewhite;
+  background-image: url("./assets/grid.jpg");
+  height: 100vh;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
+p {
+  font-family: Roboto;
+}
+
+span {
+  font-family: Bubblegum Sans;
+  font-size: 3rem;
+  text-shadow: 2px 2px 20px rgb(255, 255, 255);
+
+  &.title-word-1 {
+    color: purple;
+  }
+
+  &.title-word-2 {
+    color: green;
+  }
+
+  &.title-word-3 {
+    color: orange;
+  }
+}
