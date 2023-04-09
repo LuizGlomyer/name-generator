@@ -2,8 +2,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import TabView from './TabView';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -18,7 +18,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -38,30 +38,52 @@ function a11yProps(index) {
   };
 }
 
-export default function BasicTabs() {
+export default function BasicTabs(props) {
   const [value, setValue] = React.useState(0);
+  const { state, dispatch } = props.reducer;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+
+    switch (newValue) {
+      case 0: {
+        dispatch({ type: "setActiveTab", value: "brazillianName" });
+        break
+      }
+      case 1: {
+        dispatch({ type: "setActiveTab", value: "englishName" });
+        break
+      }
+      case 2: {
+        dispatch({ type: "setActiveTab", value: "fantasyName" });
+        break
+      }
+    }
   };
 
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Brazillian Name" {...a11yProps(0)} />
+          <Tab label="English Name" {...a11yProps(1)} />
+          <Tab label="Fantasy Name" {...a11yProps(2)} />
+          {
+            //<Tab label="Miscellaneous" {...a11yProps(2)} />
+          }
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        Item One
+        <TabView input={props} reducer={props.reducer} brazillian tabName="brazillianName" />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <TabView input={props} reducer={props.reducer} english tabName="englishName" />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <TabView input={props} reducer={props.reducer} fantasy tabName="fantasyName" />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <TabView input={props} reducer={props.reducer} miscellaneous tabName="miscellaneous" />
       </TabPanel>
     </Box>
   );

@@ -4,11 +4,13 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-export default function SimpleSnackbar() {
+
+export default function SimpleSnackbar(props) {
   const [open, setOpen] = React.useState(false);
+  const {state, dispatch} = props.reducer;
 
   const handleClick = () => {
-    setOpen(true);
+    dispatch({type: "snackbarOpen"});
   };
 
   const handleClose = (event, reason) => {
@@ -16,7 +18,7 @@ export default function SimpleSnackbar() {
       return;
     }
 
-    setOpen(false);
+    dispatch({type: "snackbarClose"});
   };
 
   const action = (
@@ -36,15 +38,12 @@ export default function SimpleSnackbar() {
   );
 
   return (
-    <div>
-      <Button onClick={handleClick}>Open simple snackbar</Button>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message="Note archived"
-        action={action}
-      />
-    </div>
+    <Snackbar
+      open={state.snackbar}
+      autoHideDuration={6000}
+      onClose={handleClose}
+      message="Copied to the clipboard"
+    //action={action}
+    />
   );
 }

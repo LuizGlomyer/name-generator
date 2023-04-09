@@ -1,42 +1,52 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.scss'
-import Button from '@mui/material/Button';
 
-
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
 
 import Switch from '@mui/material/Switch';
-import ReplayIcon from '@mui/icons-material/Replay';
-import TextField from '@mui/material/TextField';
+
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import Paper from '@mui/material/Paper';
 
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+
 
 import CircularProgress from '@mui/material/CircularProgress';
 import SimpleSnackbar from './components/SimpleSnackbar';
 import BasicTabs from './components/BasicTabs';
 
 
+import Api from './api';
+import { getReducer } from './reducer';
+
+
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [state, dispatch] = getReducer();
+  const [items, setItems] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const [generatedQuantity, setGeneratedQuantity] = useState(50);
+
+  const teste = { 1: 'Adalberto', 2: 'Ibérico' }
+
+  
+
+  function handleItemClick(item) {
+    navigator.clipboard.writeText(item.target.innerText)
+    dispatch({ type: "snackbarOpen" });
+  }
+
 
   return (
     <div className="App">
@@ -46,60 +56,39 @@ function App() {
         <span className='title-word-3'>generator</span>
       </div>
 
-      <Paper elevation={3} >
-      <BasicTabs/>
-        <Button variant="contained" onClick={() => alert("click")}>Hello World</Button>
-        <FormControl>
-          <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-          <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="female"
-            name="radio-buttons-group"
-          >
-            <FormControlLabel value="female" control={<Radio />} label="Female" />
-            <FormControlLabel value="male" control={<Radio />} label="Male" />
-            <FormControlLabel value="other" control={<Radio />} label="Other" />
-          </RadioGroup>
-        </FormControl>
+      <Paper id='paper' elevation={3}>
+        <BasicTabs quantity={quantity} setQuantity={setQuantity} reducer={{ state, dispatch }} />
 
-        <FormGroup>
-          <FormControlLabel control={<Switch defaultChecked />} label="Label" />
-          <FormControlLabel disabled control={<Switch />} label="Disabled" />
-        </FormGroup>
+        {
+          state.loading
+            ? <div className='loading-circle'><CircularProgress /></div>
+            :
+            <List>
+              {
+                Object.keys(state.items[state.activeTab]).map((index) => {
+                  const key = state.items[state.activeTab][index];
+                  return (
+                    <>
+                      <ListItemButton key={`ItemButton-${index}-${key}`} onClick={handleItemClick}>
+                        <ListItemIcon key={`ItemIcon-${index}-${key}`}>
+                          <ContentCopyIcon key={`Icon-${index}-${key}`} />
+                        </ListItemIcon >
+                        <ListItemText key={`ItemText-${index}-${key}`} primary={state.items[state.activeTab][index]} />
+                        {
+                          //<Avatar alt="Cindy Baker" src="https://picsum.photos/200" />
+                        }
+                      </ListItemButton>
 
+                    </>
+                  );
+                }
+                )
+              }
+            </List>
+        }
 
-        <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-        <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-
-
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Trash" />
-            </ListItemButton>
-          </ListItem>
-          <Divider variant="middle" />
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemText primary="Spam" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        <Tooltip title="Reset to defaults">
-          <IconButton>
-            <ReplayIcon />
-          </IconButton>
-        </Tooltip>
-        <CircularProgress />
-
-        <SimpleSnackbar/>
-        
-
-
-
+        <SimpleSnackbar reducer={{ state, dispatch }} />
       </Paper>
-
-
     </div>
   );
 }

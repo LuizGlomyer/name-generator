@@ -1,8 +1,11 @@
+from flask import Flask, request
+from flask_cors import CORS
+
 from generator import generator
 import routes
 
-from flask import Flask, request
 app = Flask(__name__)
+CORS(app)
 
 max = 100  # to prevent server abuse
 
@@ -15,7 +18,7 @@ def generate(item, number_of_items, **kwargs):
         list = {i+1: item(**kwargs) for i in range(number_of_items)}
         return list
     else:
-        return item(**kwargs)
+        return {1: item(**kwargs)}
 
 
 @app.route('/')
